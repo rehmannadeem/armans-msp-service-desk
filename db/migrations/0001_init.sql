@@ -42,7 +42,16 @@ create table tickets (
   subject text not null,
   description text not null,
   status text not null default 'new'
-    check (status in ('new','triaged','dispatched','in_progress','resolved','escalated','closed')),
+    check (status in (
+  'new',
+  'triaged',
+  'dispatcher_review',
+  'assigned',
+  'in_progress',
+  'resolved',
+  'escalated',
+  'closed'
+)),
   category text,
   impact text,
   urgency text,
