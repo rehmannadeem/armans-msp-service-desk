@@ -1,0 +1,56 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "lib/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".scaffold",
+    "lib/db/**/*",
+    "lib/supabase/**/*",
+    "lib/domain/audit.ts",
+    "lib/domain/demo-fixtures.ts",
+    "lib/domain/demo-knowledge.ts",
+    "lib/domain/knowledge.ts",
+    "lib/domain/n8n.ts",
+    "lib/domain/taxonomy.ts",
+    "lib/domain/tickets.ts",
+    "lib/domain/types.ts",
+    "lib/llm/triage-rules.ts"
+  ]
+}
