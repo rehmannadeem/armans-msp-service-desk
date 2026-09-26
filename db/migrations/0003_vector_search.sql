@@ -1,5 +1,5 @@
 create or replace function public.match_approved_knowledge_chunks(
-  query_embedding extensions.vector(1536),
+  query_embedding public.vector(1536),
   match_threshold double precision default 0.70,
   match_count integer default 5
 )
@@ -22,18 +22,30 @@ as $$
     kc.section,
     kc.source_locator,
     kc.chunk_text,
-    (1 - (kc.embedding OPERATOR(extensions.<=>) query_embedding))::double precision
+    (
+      1 - (
+        kc.embedding OPERATOR(public.<=>) query_embedding
+      )
+    )::double precision as similarity
   from public.approved_knowledge_chunks kc
   where kc.embedding is not null
-    and (1 - (kc.embedding OPERATOR(extensions.<=>) query_embedding)) >= match_threshold
-  order by kc.embedding OPERATOR(extensions.<=>) query_embedding
+    and (
+      1 - (
+        kc.embedding OPERATOR(public.<=>) query_embedding
+      )
+    ) >= match_threshold
+  order by kc.embedding OPERATOR(public.<=>) query_embedding
   limit least(greatest(match_count, 1), 20);
 $$;
 
 revoke all on function public.match_approved_knowledge_chunks(
-  extensions.vector, double precision, integer
+  public.vector,
+  double precision,
+  integer
 ) from public;
 
 grant execute on function public.match_approved_knowledge_chunks(
-  extensions.vector, double precision, integer
+  public.vector,
+  double precision,
+  integer
 ) to authenticated;
