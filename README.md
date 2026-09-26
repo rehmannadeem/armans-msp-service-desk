@@ -81,6 +81,20 @@ Documentation in this repository is written to be safe for public technical disc
 - private ticket content
 - internal secrets or confidential vendor configuration
 
+## Business value
+
+This V1 targets a practical MSP service-desk problem: technicians lose time when tickets arrive incomplete, routing is manual, and approved troubleshooting knowledge is scattered.
+
+Armans.AI is seeking MSP / IT-service pilot partners for a focused **7-day workflow pilot** using one real support workflow and the MSP's approved knowledge base. The objective is to measure triage quality, routing usefulness, retrieval grounding, technician acceptance, escalation behavior, and time saved.
+
+## Partnership / pilot scope
+
+A real pilot can add the integration layer required by the partner, for example PSA/helpdesk ticket intake, approved knowledge ingestion, notifications, ticket updates, or reporting. The current V1 deliberately avoids speculative integrations until a real MSP workflow requires them.
+
 ## Current product boundary
 
 This is a working V1/demo and technical pilot foundation. It is **not yet commercially validated** and is **not yet connected to a real MSP PSA/helpdesk or real customer knowledge base**. Those integrations should be driven by a real pilot requirement.
+
+## Commercial use
+
+This repository is published as a technical portfolio, evaluation, and partnership reference. No customer credentials or production customer data are included. Commercial deployment or reuse should be agreed with Armans.AI.
