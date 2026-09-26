@@ -1,6 +1,62 @@
 # Visual Learning Materials
 
-This repository's documentation is designed to be understandable visually as well as through code.
+This repository includes a public-safe visual learning set for understanding the V1 architecture, workflow, data model, security controls, and practical technical skills.
+
+## 1. Technical system design
+
+![Armans.AI MSP Service Desk — Technical System Design](images/system-design.webp)
+
+Shows the live V1 path:
+
+Technician / Dispatcher UI → Next.js on Cloudflare Workers → Supabase → OpenAI.
+
+It also shows that n8n is currently an optional lab/orchestration tool rather than part of the live request critical path.
+
+## 2. End-to-end workflow
+
+![Armans.AI MSP Service Desk — End-to-End Workflow](images/end-to-end-workflow.webp)
+
+Covers:
+
+- ticket intake and AI triage
+- dispatcher review
+- technician workbench
+- approved-only semantic retrieval
+- grounded recommendation
+- resolve / escalate decision
+- audit trail
+- safe abstention with `NO_APPROVED_GUIDANCE`
+
+## 3. Data model, retrieval, and security
+
+![Armans.AI MSP Service Desk — Data Model, Retrieval, and Security](images/data-model-retrieval-security.webp)
+
+Covers:
+
+- identity / tenancy
+- ticketing tables
+- knowledge documents and chunks
+- AI recommendations and human decisions
+- pgvector retrieval
+- RLS
+- service-side search RPC
+- Cloudflare secret management
+- auditability and human control
+
+## 4. Hands-on technical learning map
+
+![Armans.AI MSP Service Desk — Hands-On Technical Learning Map](images/technical-learning-map.webp)
+
+Summarizes the practical exposure gained through this project:
+
+- Cloudflare deployment
+- Supabase backend
+- OpenAI integration
+- n8n workflow lab
+- grounded AI / RAG design
+- QA and operations
+- debugging methodology
+- production-hardening next steps
 
 ## Architecture at a glance
 
@@ -32,13 +88,6 @@ flowchart LR
     H --> ESC[Escalate]
 ```
 
-## Generated infographic set
+## Public-safe scope
 
-The project has four generated training visuals intended for `docs/images/`:
-
-1. `system-design.webp` — technical system design
-2. `end-to-end-workflow.webp` — full operational workflow
-3. `data-model-retrieval-security.webp` — data model, retrieval, and security
-4. `technical-learning-map.webp` — hands-on learning map
-
-Once the binary image assets are present in `docs/images/`, they can be embedded directly in this page and the root README.
+These visuals intentionally explain architecture and workflow without exposing API keys, passwords, customer credentials, private MSP data, or confidential knowledge-base content.

@@ -4,6 +4,8 @@ A cloud-hosted, human-in-the-loop service-desk intelligence layer for MSP / IT s
 
 **V1 technical acceptance passed on 2026-09-26.**
 
+![Armans.AI MSP Service Desk — Technical System Design](docs/images/system-design.webp)
+
 ## What the system does
 
 Ticket intake → AI triage → dispatcher approval → technician assignment → approved-KB semantic retrieval → cited guidance or exact `NO_APPROVED_GUIDANCE` → human resolve/escalate → audit trail.
