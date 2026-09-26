@@ -8,12 +8,14 @@ export class ForbiddenError extends Error {
 }
 
 /** Anyone signed in may submit a ticket for their own organization. */
-export function canSubmitTicket(_role: Role): boolean {
+export function canSubmitTicket(role: Role): boolean {
+  void role;
   return true;
 }
 
 /** Anyone signed in may list/view tickets scoped to their own organization. */
-export function canViewTickets(_role: Role): boolean {
+export function canViewTickets(role: Role): boolean {
+  void role;
   return true;
 }
 

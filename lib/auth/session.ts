@@ -66,6 +66,7 @@ export function verifySessionCookieValue(value: string | undefined | null): Sess
     return null;
   }
 
-  const { exp: _exp, ...user } = payload;
+  const { exp: expiresAt, ...user } = payload;
+  void expiresAt;
   return user;
 }

@@ -79,3 +79,4 @@ code { background:#eef2f7; padding:2px 5px; border-radius:5px; font-family:Conso
   [class*="md:flex-row"] { flex-direction:column; }
   .text-3xl { font-size:25px; }
 }
+.block { display:block; }

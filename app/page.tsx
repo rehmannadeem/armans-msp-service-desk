@@ -1,5 +1,5 @@
-import DemoApp from "./demo-app";
+import LiveApp from "./live-app";
 
 export default function Home() {
-  return <DemoApp />;
+  return <LiveApp />;
 }
