@@ -12,7 +12,9 @@
     "test": "vitest run",
     "verify:live": "node scripts/verify-live-config.mjs",
     "preview:cloudflare": "opennextjs-cloudflare build && wrangler dev",
-    "deploy:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "deploy:cloudflare": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "eval": "tsx scripts/run-eval.ts",
+    "eval:seed": "tsx scripts/run-eval.ts --seed"
   },
   "dependencies": {
     "next": "16.3.6",
@@ -21,7 +23,6 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@next/swc-win32-x64-msvc": "^16.3.6",
     "@opennextjs/cloudflare": "^1.20.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -31,6 +32,7 @@
     "eslint-config-next": "16.3.6",
     "eslint-plugin-react": "^7.37.5",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^2.1.4",
     "wrangler": "^4.141.0"

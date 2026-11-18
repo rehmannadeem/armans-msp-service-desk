@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { handoffEscalation } from "@/lib/live/escalation";
+import { after, NextResponse } from "next/server";
 import { requireLiveUser } from "@/lib/live/auth";
-import { insertRows, patchRows, supabaseRest } from "@/lib/live/supabase";
+import { insertAuditLog, insertRows, patchRows, supabaseRest } from "@/lib/live/supabase";
 import type { LiveTicket } from "@/lib/live/types";
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
@@ -45,7 +46,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       payload: { recommendation_id: recommendationId, notes: body.notes || null },
     });
 
-    await insertRows(token, "audit_logs", {
+    await insertAuditLog(token, {
       organization_id: user.organization_id,
       actor_user_id: user.id,
       actor_role: user.role,
@@ -55,6 +56,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       details: { recommendation_id: recommendationId, notes: body.notes || null },
     });
 
+    if (body.decision === "escalate") {
+      after(() => handoffEscalation(token, user, ticket, "escalated", "Human escalation"));
+    }
     return NextResponse.json({ ticket });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Decision failed.";
