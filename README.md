@@ -127,4 +127,4 @@ Migration 0004 defines a separate service-role RPC with a 0.60 SQL default.
 
 Live demo URL: pending confirmation from Cloudflare deployment metadata.
 
-Licence: **placeholder — Nadeem decides**.
+Licence: all rights reserved, published for portfolio evaluation only. See [LICENSE](LICENSE).
