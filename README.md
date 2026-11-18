@@ -98,3 +98,33 @@ This is a working V1/demo and technical pilot foundation. It is **not yet commer
 ## Commercial use
 
 This repository is published as a technical portfolio, evaluation, and partnership reference. No customer credentials or production customer data are included. Commercial deployment or reuse should be agreed with Armans.AI.
+
+## Evaluation results (synthetic data)
+
+The evaluation pack contains 15 synthetic knowledge articles and 24 golden
+tickets. A live benchmark report is pending an isolated Supabase instance and
+an evaluation OpenAI key.
+
+1. Apply the repository migrations to a local or dedicated test Supabase
+   instance. Set `EVAL_SUPABASE_URL`, `EVAL_SUPABASE_ANON_KEY`,
+   `EVAL_OPENAI_API_KEY` and `OPENAI_EMBEDDING_MODEL` in the process environment.
+   For a hosted test project also set `PRODUCTION_SUPABASE_URL` to the production
+   project URL and `EVAL_CONFIRM_ISOLATED=yes`. Keep credentials outside Git.
+2. Set `EVAL_SUPABASE_SERVICE_ROLE_KEY` for the isolated project and run
+   `npm run eval:seed`. This loads the synthetic articles, including the
+   draft articles as pending documents.
+3. Create a test Auth user and its matching `public.users` row in the test
+   instance. Use the seeded `demo-msp` organization ID printed by the seed
+   command and the `l1_technician` role. Sign in as that user and set its
+   access token as `EVAL_DEMO_MSP_ACCESS_TOKEN`.
+4. Run `npm run eval`. A complete run writes JSON and Markdown under
+   `evals/reports/` even when individual cases fail. The runner caps requests
+   at 60 and prints an embedding-token estimate.
+
+The live guidance route uses the authenticated RPC from migration 0003. Its
+SQL default is 0.70 and the route passes an explicit threshold, 0.35 by default.
+Migration 0004 defines a separate service-role RPC with a 0.60 SQL default.
+
+Live demo URL: pending confirmation from Cloudflare deployment metadata.
+
+Licence: all rights reserved, published for portfolio evaluation only. See [LICENSE](LICENSE).

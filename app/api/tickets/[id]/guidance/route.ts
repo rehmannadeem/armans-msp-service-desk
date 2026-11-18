@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
+import { handoffEscalation } from "@/lib/live/escalation";
+import { after, NextResponse } from "next/server";
 import { requireLiveUser } from "@/lib/live/auth";
-import { createEmbedding } from "@/lib/live/openai";
-import { getLiveConfig } from "@/lib/live/env";
-import { insertRows, patchRows, supabaseRest } from "@/lib/live/supabase";
-import { notifyAbstention } from "@/lib/live/n8n";
-import type { LiveTicket, RankedChunk } from "@/lib/live/types";
+import { recommendFromApprovedKnowledge } from "@/lib/live/recommendation";
+import { insertAuditLog, insertRows, patchRows, supabaseRest } from "@/lib/live/supabase";
 import { NO_APPROVED_GUIDANCE } from "@/lib/safety/constants";
+import type { LiveTicket } from "@/lib/live/types";
 
 type RecommendationRow = { id: string; status: string; recommendation_text: string | null; citations: unknown };
 
@@ -22,36 +21,14 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
     if (!ticket) return NextResponse.json({ error: "Ticket not found." }, { status: 404 });
 
     const queryText = `${ticket.subject} ${ticket.description}`;
-    const embedding = await createEmbedding(queryText);
-    const { ragMinSimilarity, embeddingModel } = getLiveConfig();
-
-    const matches = await supabaseRest<RankedChunk[]>(token, "rpc/match_approved_knowledge_chunks", {
-      method: "POST",
-      body: JSON.stringify({
-        query_embedding: embedding,
-        match_threshold: ragMinSimilarity,
-        match_count: 5,
-      }),
-    });
+    const { matches, citations, abstain, recommendationText, ragMinSimilarity, embeddingModel } =
+      await recommendFromApprovedKnowledge(token, queryText);
 
     const triageRuns = await supabaseRest<Array<{ id: string }>>(
       token,
       `ai_triage_runs?select=id&ticket_id=eq.${id}&order=created_at.desc&limit=1`,
     );
     const triageRunId = triageRuns[0]?.id ?? null;
-
-    const abstain = matches.length === 0;
-    const recommendationText = abstain
-      ? NO_APPROVED_GUIDANCE
-      : matches.map((match, index) => `${index + 1}. ${match.chunk_text} [${match.source_locator || match.section || "approved source"}]`).join("\n");
-
-    const citations = matches.map((match) => ({
-      document_id: match.document_id,
-      chunk_id: match.id,
-      section: match.section,
-      source_locator: match.source_locator,
-      similarity: match.similarity,
-    }));
 
     const [recommendation] = await insertRows<RecommendationRow>(token, "ai_recommendations", {
       organization_id: user.organization_id,
@@ -80,7 +57,7 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
       payload: { recommendation_id: recommendation?.id, citations, threshold: ragMinSimilarity },
     });
 
-    await insertRows(token, "audit_logs", {
+    await insertAuditLog(token, {
       organization_id: user.organization_id,
       actor_user_id: user.id,
       actor_role: user.role,
@@ -90,7 +67,7 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
       details: { recommendation_id: recommendation?.id, match_count: matches.length },
     });
 
-    if (abstain) void notifyAbstention({ ticketId: id, organizationId: user.organization_id, subject: ticket.subject });
+    if (abstain) after(() => handoffEscalation(token, user, ticket, "abstained", NO_APPROVED_GUIDANCE));
     return NextResponse.json({ recommendation, matches });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Guidance failed.";

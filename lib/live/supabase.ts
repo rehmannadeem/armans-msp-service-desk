@@ -46,3 +46,12 @@ export async function patchRows<T>(
     body: JSON.stringify(body),
   });
 }
+
+export function insertAuditLog(token: string, details: Record<string, unknown>): Promise<void> {
+  // Technicians can insert audit entries but only service managers can read them.
+  return supabaseRest<void>(token, "audit_logs", {
+    method: "POST",
+    headers: { Prefer: "return=minimal" },
+    body: JSON.stringify(details),
+  });
+}

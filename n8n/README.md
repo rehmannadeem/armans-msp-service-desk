@@ -38,10 +38,33 @@ Use this workflow for notifications, downstream queue integrations, or pilot-spe
 
 ## Workflow 4 — Safe Abstention Event
 
-The application can POST to `N8N_ABSTENTION_WEBHOOK_URL` when retrieval returns no approved guidance.
+The demo-domain adapter supports `N8N_ABSTENTION_WEBHOOK_URL`. The live application uses the signed escalation handoff below.
 
 Use it for escalation notifications only. Do not let n8n generate unsupported troubleshooting advice.
 
 ## Git source-of-truth rule
 
 After the live n8n workflows are finalized, export their JSON from n8n and save them in this directory. Never commit credentials or secret values.
+
+## Escalation handoff
+
+Import `escalation-handoff.json` into an n8n instance that allows the Code node
+to use the built-in `crypto` module and read
+`N8N_ESCALATION_WEBHOOK_SECRET`. Configure the same signing secret in the app
+and n8n. Set the app's `N8N_ESCALATION_WEBHOOK_URL` to the workflow webhook URL.
+
+Bind the Postgres node to a dedicated automation database. Create the alert
+queue there before enabling the workflow.
+
+```sql
+CREATE TABLE escalation_alerts (
+  idempotency_key text PRIMARY KEY,
+  payload jsonb NOT NULL,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+```
+
+The node inserts an alert and sends a Postgres notification on
+`armans_escalation` only for the first delivery of each ticket and event. An
+alert consumer can listen on that channel and use the key to read the durable
+queue, including alerts queued while the consumer was offline.
