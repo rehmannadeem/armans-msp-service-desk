@@ -1,0 +1,37 @@
+# Keeps the free-tier Supabase project for the live demo from auto-pausing
+# (free projects pause after about 7 days without database activity).
+# Needs two repository secrets: SUPABASE_URL and SUPABASE_ANON_KEY.
+# The anon key is the public client key; row-level security still applies,
+# so this request returns an empty list and reads no tenant data.
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: "17 3 */3 * *" # every 3 days, 03:17 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the database through the REST API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "::warning::SUPABASE_URL or SUPABASE_ANON_KEY secret is not set; skipping."
+            exit 0
+          fi
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$SUPABASE_URL/rest/v1/organizations?select=id&limit=1")
+          echo "HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::Supabase did not answer 200 (got $code). The project may be paused: restore it in the Supabase dashboard."
+            exit 1
+          fi

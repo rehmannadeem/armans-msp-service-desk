@@ -6,6 +6,11 @@ A cloud-hosted, human-in-the-loop service-desk intelligence layer for MSP / IT s
 
 ![Armans.AI MSP Service Desk — Technical System Design](docs/images/system-design.webp)
 
+## Try it
+
+- **Guided demo, no login:** https://armans-msp-service-desk.veenus-rehman.workers.dev/demo — the same workflow in your browser with synthetic VPN knowledge, rule-based triage and keyword retrieval. Try a non-VPN ticket to see `NO_APPROVED_GUIDANCE`.
+- **Live V1 (sign-in):** https://armans-msp-service-desk.veenus-rehman.workers.dev — OpenAI triage, pgvector retrieval, Supabase Auth and audit trail. Accounts are issued for pilot evaluations.
+
 ## What the system does
 
 Ticket intake → AI triage → dispatcher approval → technician assignment → approved-KB semantic retrieval → cited guidance or exact `NO_APPROVED_GUIDANCE` → human resolve/escalate → audit trail.

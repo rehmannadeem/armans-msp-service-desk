@@ -155,6 +155,7 @@ export default function LiveApp() {
             <button className="mt-4 rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white" disabled={busy === "login"}>Sign in</button>
           </form>
           {message && <p className="mt-3 text-sm" style={{ color: "#b91c1c" }}>{message}</p>}
+          <p className="mt-5 border-t pt-4 text-sm text-slate-600">No account? <a href="/demo" className="font-semibold text-teal-700 underline">Open the guided demo</a> — same workflow, synthetic data, no login.</p>
         </section>
       </div></main>
     );

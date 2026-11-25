@@ -108,8 +108,10 @@ export default function DemoApp() {
         <header className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-semibold text-teal-700">Armans.AI · Commercial V1 Demo</p>              <h1 className="mt-1 text-3xl font-bold tracking-tight">MSP Service Desk Intelligence Layer</h1>
+              <p className="text-sm font-semibold text-teal-700">Armans.AI · Guided demo · no login · synthetic data</p>
+              <h1 className="mt-1 text-3xl font-bold tracking-tight">MSP Service Desk Intelligence Layer</h1>
               <p className="mt-2 max-w-3xl text-sm text-slate-600">VPN support workflow: triage, dispatcher control, approved-knowledge retrieval, technician decision, and audit trail.</p>
+              <p className="mt-2 max-w-3xl text-xs text-slate-500">This page runs in your browser with rule-based triage and keyword retrieval over a small synthetic VPN runbook. The signed-in live version uses OpenAI triage, pgvector retrieval and a Supabase audit trail. Try a ticket outside VPN (for example a laptop battery fault) to see <code>NO_APPROVED_GUIDANCE</code>.</p>
             </div>
             <button onClick={reset} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-50">Reset demo</button>
           </div>
